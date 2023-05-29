@@ -1,5 +1,4 @@
 package com.sbs.exam.sevlet;
-
 import com.sbs.exam.util.DBUtil;
 import com.sbs.exam.util.SecSql;
 import jakarta.servlet.ServletException;
@@ -7,14 +6,12 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
-
 @WebServlet("/article/list")
 public class ArticleListServlet extends HttpServlet {
     @Override
@@ -28,20 +25,20 @@ public class ArticleListServlet extends HttpServlet {
             System.out.println("DB 드라이버 클래스 로딩 실패");
             return;
         }
-
         String url = "jdbc:mysql://127.0.0.1:3307/JSP_Community?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul&useOldAliasMetadataBehavior=true&zeroDateTimeNehavior=convertToNull";
-        String user = "sbsst";
-        String password = "sbs123414";
-
+        String user = "root";
+        String password = "1234";
         try {
             conn = DriverManager.getConnection(url, user, password);
             DBUtil dbUtil = new DBUtil();
-
             SecSql sql = new SecSql();
             sql.append("SELECT *");
             sql.append("FROM article");
 
             List<Map<String, Object>> articleRows = dbUtil.selectRows(conn, sql);
+
+            req.setAttribute("articleRows", articleRows);
+            req.getRequestDispatcher("../article/list.jsp").forward(req, resp);
 
         } catch (SQLException e) {
             e.printStackTrace();
